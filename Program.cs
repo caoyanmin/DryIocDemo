@@ -9,8 +9,8 @@ namespace DryIocDemo
     {
         static void Main(string[] args)
         {
-            var rules = Rules.MicrosoftDependencyInjectionRules;
-            // var rules = Rules.MicrosoftDependencyInjectionRules.WithConcreteTypeDynamicRegistrations(reuse: Reuse.Transient);
+            // var rules = Rules.MicrosoftDependencyInjectionRules;
+            var rules = Rules.MicrosoftDependencyInjectionRules.WithConcreteTypeDynamicRegistrations(reuse: Reuse.Transient);
             // var rules = Rules.Default.WithConcreteTypeDynamicRegistrations(reuse: Reuse.Transient);
             // var rules = Rules.Default.WithConcreteTypeDynamicRegistrations(reuse: Reuse.Transient).WithMicrosoftDependencyInjectionRules();
 
@@ -26,6 +26,8 @@ namespace DryIocDemo
 
             var host = hostBuilder.Build();
 
+            // WORKAROUND for now!
+            container = host.Services.GetService<IContainer>() as Container;
 
             try
             {
@@ -33,7 +35,7 @@ namespace DryIocDemo
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Catch a exception when resolve interface from Container");
+                Console.WriteLine("Catch a exception when resolve interface from Container: " + ex.Message);
             }
 
             try
@@ -42,7 +44,7 @@ namespace DryIocDemo
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Catch a exception when resolve implement from Container");
+                Console.WriteLine("Catch a exception when resolve implement from Container" + ex.Message);
             }
 
             try
@@ -51,7 +53,7 @@ namespace DryIocDemo
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Catch a exception when resolve interface from ServiceProvider");
+                Console.WriteLine("Catch a exception when resolve interface from ServiceProvider" + ex.Message);
             }
 
             try
@@ -60,7 +62,7 @@ namespace DryIocDemo
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Catch a exception when resolve implement from ServiceProvider");
+                Console.WriteLine("Catch a exception when resolve implement from ServiceProvider" + ex.Message);
             }
 
             host.RunAsync();
